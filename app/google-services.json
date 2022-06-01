@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "53820055229",
+    "firebase_url": "https://adminpanel-c4498-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "adminpanel-c4498",
+    "storage_bucket": "adminpanel-c4498.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53820055229:android:ac386204c2118b265821d4",
+        "android_client_info": {
+          "package_name": "com.example.adminpanel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "53820055229-ji9inf6i5libdi34c8h3tifdgh0jmm6m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvag6a8dfo4aqueB_18r8ADVvq9AAfBOU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "53820055229-ji9inf6i5libdi34c8h3tifdgh0jmm6m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
