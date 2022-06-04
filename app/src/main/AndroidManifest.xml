@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.adminpanel">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -17,7 +17,25 @@
         android:theme="@style/Theme.AdminPanel"
         tools:targetApi="31">
         <activity
-            android:name=".UploadNotice"
+            android:name=".Notice.DeleteNoticeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Facullty.UpdateTeacher"
+            android:exported="false" />
+        <activity
+            android:name=".Facullty.AddTeacher"
+            android:exported="false" />
+        <activity
+            android:name=".Facullty.UpdateFacullty"
+            android:exported="false" />
+        <activity
+            android:name=".UploadPDF"
+            android:exported="false" />
+        <activity
+            android:name=".UploadImage"
+            android:exported="false" />
+        <activity
+            android:name=".Notice.UploadNotice"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

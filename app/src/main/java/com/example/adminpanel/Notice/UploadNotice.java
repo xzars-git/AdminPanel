@@ -1,8 +1,7 @@
-package com.example.adminpanel;
+package com.example.adminpanel.Notice;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RestrictTo;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
@@ -16,8 +15,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.adminpanel.R;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
@@ -36,15 +35,15 @@ import java.util.Calendar;
 public class UploadNotice extends AppCompatActivity {
 
     private CardView addImage;
-    private final int REQ = 1;
     private Bitmap bitmap;
     private ImageView imageView_Notice;
     private TextInputEditText notice_Title;
     private MaterialButton btn_UploadNotice;
-    private DatabaseReference reference;
-    private StorageReference storageReference;
+    private final int REQ = 1;
     String downloadUrl = "";
     private ProgressDialog progressDialog;
+    private DatabaseReference reference, dbRef;
+    private StorageReference storageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +53,7 @@ public class UploadNotice extends AppCompatActivity {
         imageView_Notice = findViewById(R.id.imageView_Notice);
         notice_Title = findViewById(R.id.notice_Title);
         btn_UploadNotice = findViewById(R.id.btn_UploadNotice);
-        reference = FirebaseDatabase.getInstance().getReference();
+        reference = FirebaseDatabase.getInstance("https://adminpanel-c4498-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference();
         storageReference = FirebaseStorage.getInstance().getReference();
         progressDialog = new ProgressDialog(this);
 
@@ -68,12 +67,13 @@ public class UploadNotice extends AppCompatActivity {
         btn_UploadNotice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(notice_Title.getText().toString().isEmpty()){
+                if(notice_Title.getText().toString().isEmpty() || bitmap == null){
                     notice_Title.setError("Empty");
                     notice_Title.requestFocus();
-                }else if(bitmap == null){
-                    uploadData();
-                }else {
+                    Toast.makeText(UploadNotice.this, "Please upload image and input title !!!", Toast.LENGTH_SHORT).show();
+                    finish();
+                    startActivity(getIntent());
+                } else {
                     uploadImage();
                 }
             }
@@ -81,8 +81,8 @@ public class UploadNotice extends AppCompatActivity {
     }
 
     private void uploadData() {
-        reference = reference.child("Notice");
-        final String uniqueKey = reference.push().getKey();
+        dbRef = reference.child("Notice");
+        final String uniqueKey = dbRef.push().getKey();
 
         String title = notice_Title.getText().toString();
 
@@ -97,18 +97,16 @@ public class UploadNotice extends AppCompatActivity {
         NoticeData noticeData = new NoticeData(title, downloadUrl, date, time, uniqueKey);
 
         Toast.makeText(this, "Data Uploading", Toast.LENGTH_SHORT).show();
-        reference.child(uniqueKey).setValue(noticeData).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void unused) {
-                progressDialog.dismiss();
-                Toast.makeText(UploadNotice.this, "Notice Uploaded !!!", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                progressDialog.dismiss();
-                Toast.makeText(UploadNotice.this, "Something went wrong !!!", Toast.LENGTH_SHORT).show();
-            }
+        dbRef.child(uniqueKey).setValue(noticeData).addOnCompleteListener(task -> {
+           if(task.isComplete()){
+               progressDialog.dismiss();
+               Toast.makeText(UploadNotice.this, "Notice Uploaded !!!", Toast.LENGTH_SHORT).show();
+               finish();
+               startActivity(getIntent());
+           }else {
+               progressDialog.dismiss();
+               Toast.makeText(UploadNotice.this, "Something went wrong !!!", Toast.LENGTH_SHORT).show();
+           }
         });
     }
 
@@ -161,7 +159,6 @@ public class UploadNotice extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             imageView_Notice.setImageBitmap(bitmap);
         }
     }
